@@ -1,6 +1,6 @@
 import {useAtom} from 'jotai';
 import getStroke from 'perfect-freehand';
-import React, {useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {
   BoundingBoxes2DAtom,
   BoundingBoxes3DAtom,

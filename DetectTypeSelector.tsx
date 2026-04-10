@@ -1,5 +1,4 @@
 import {useAtom} from 'jotai';
-import React from 'react';
 import {detectTypeOptions, promptTemplates} from './consts';
 import {DetectTypeAtom, HoverEnteredAtom} from './atoms';
 import {DetectTypes} from './Types';

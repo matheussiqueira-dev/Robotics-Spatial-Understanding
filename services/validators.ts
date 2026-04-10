@@ -36,12 +36,11 @@ const assertBoundingBox2D = (value: unknown): value is BoundingBox2DType => {
 };
 
 const assertBoundingBoxMask = (value: unknown): value is BoundingBoxMaskType => {
-  return (
-    assertBoundingBox2D(value) &&
-    isObject(value) &&
-    isString(value['imageData']) &&
-    (value['imageData'] as string).startsWith('data:image/')
-  );
+  if (!assertBoundingBox2D(value)) return false;
+  // Re-widen to Record so we can check the extra imageData field that
+  // BoundingBox2DType does not declare.
+  const rec = value as unknown as Record<string, unknown>;
+  return isString(rec['imageData']) && rec['imageData'].startsWith('data:image/');
 };
 
 const assertPoint = (value: unknown): value is PointingType => {

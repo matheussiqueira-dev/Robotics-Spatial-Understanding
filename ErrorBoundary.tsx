@@ -1,6 +1,6 @@
-import React from 'react';
+import {Component, type ErrorInfo, type ReactNode} from 'react';
 
-type Props = {children: React.ReactNode};
+type Props = {children: ReactNode};
 
 type State = {hasError: boolean; message: string};
 
@@ -11,7 +11,7 @@ type State = {hasError: boolean; message: string};
  * fallback UI so the page never shows a blank screen. The original error
  * message is displayed to aid debugging without leaking a raw stack trace.
  */
-export class ErrorBoundary extends React.Component<Props, State> {
+export class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {hasError: false, message: ''};
@@ -23,7 +23,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
     return {hasError: true, message};
   }
 
-  override componentDidCatch(error: unknown, info: React.ErrorInfo) {
+  override componentDidCatch(error: unknown, info: ErrorInfo) {
     console.error('[ErrorBoundary] caught error', error, info.componentStack);
   }
 

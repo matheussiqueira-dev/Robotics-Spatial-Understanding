@@ -1,5 +1,4 @@
 import {useAtom} from 'jotai';
-import React from 'react';
 import {DrawModeAtom, LinesAtom} from './atoms';
 import {Palette} from './Palette';
 

@@ -1,5 +1,4 @@
 import {useAtom} from 'jotai';
-import React from 'react';
 import {Content} from './Content';
 import {DetectTypeSelector} from './DetectTypeSelector';
 import {ExampleImages} from './ExampleImages';

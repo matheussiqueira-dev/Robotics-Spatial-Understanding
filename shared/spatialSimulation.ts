@@ -54,7 +54,7 @@ const buildLabels = (target: string, count: number) => {
   const base = tokens.length > 0 ? tokens : ['item'];
 
   return Array.from({length: count}, (_, index) => {
-    const token = base[index % base.length];
+    const token = base[index % base.length] ?? 'item';
     return `${token}-${index + 1}`;
   });
 };
@@ -199,40 +199,41 @@ export function simulateSpatialAnalysis(
   const rng = makeRng(seed);
   const count = buildCount(payload.detectType, rng);
 
-  let items:
-    | BoundingBox2DType[]
-    | BoundingBoxMaskType[]
-    | PointingType[]
-    | BoundingBox3DType[];
-
-  if (payload.detectType === '2D bounding boxes') {
-    items = create2DItems(payload.target, rng, count);
-  } else if (payload.detectType === 'Segmentation masks') {
-    items = createMaskItems(payload.target, rng, seed, count);
-  } else if (payload.detectType === 'Points') {
-    items = createPointItems(payload.target, rng, count);
-  } else {
-    items = create3DItems(payload.target, rng, count);
-  }
-
   const note = payload.thinkingEnabled
     ? 'Modo analitico ativo: respostas mais conservadoras para reduzir falso-positivo.'
     : 'Modo rapido ativo: respostas mais objetivas para iteracao veloz.';
 
   const latencyMs = Math.round(220 + rng() * 540 + payload.lines.length * 8);
 
-  return {
+  const base = {
     requestId: `req_${seed.toString(16)}`,
     generatedAt: new Date().toISOString(),
-    detectType: payload.detectType,
     model: payload.model,
     latencyMs,
-    summary: {
-      target: normalizeTarget(payload.target),
-      itemCount: items.length,
-      confidenceBand: confidenceFromTemperature(payload.temperature),
-      note,
-    },
-    items,
   };
+
+  const makeSummary = (itemCount: number) => ({
+    target: normalizeTarget(payload.target),
+    itemCount,
+    confidenceBand: confidenceFromTemperature(payload.temperature),
+    note,
+  });
+
+  if (payload.detectType === '2D bounding boxes') {
+    const items = create2DItems(payload.target, rng, count);
+    return {...base, detectType: '2D bounding boxes' as const, summary: makeSummary(items.length), items};
+  }
+
+  if (payload.detectType === 'Segmentation masks') {
+    const items = createMaskItems(payload.target, rng, seed, count);
+    return {...base, detectType: 'Segmentation masks' as const, summary: makeSummary(items.length), items};
+  }
+
+  if (payload.detectType === 'Points') {
+    const items = createPointItems(payload.target, rng, count);
+    return {...base, detectType: 'Points' as const, summary: makeSummary(items.length), items};
+  }
+
+  const items = create3DItems(payload.target, rng, count);
+  return {...base, detectType: '3D bounding boxes' as const, summary: makeSummary(items.length), items};
 }

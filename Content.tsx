@@ -1,6 +1,6 @@
 import {useAtom} from 'jotai';
 import getStroke from 'perfect-freehand';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {Fragment, useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActiveColorAtom,
   BoundingBoxes2DAtom,
@@ -135,6 +135,7 @@ export function Content() {
 
       const updated = [...prev];
       const lastLine = updated[updated.length - 1];
+      if (!lastLine) return prev;
       updated[updated.length - 1] = [[...lastLine[0], [x, y]], lastLine[1]];
       return updated;
     });
@@ -238,14 +239,14 @@ export function Content() {
 
               {detectType === '3D bounding boxes'
                 ? boundingBoxes3D.map((box, index) => (
-                    <React.Fragment key={`box3d-${index}`}>
+                    <Fragment key={`box3d-${index}`}>
                       <Box3D
                         box={box}
                         fov={fov}
                         mediaDims={mediaDims}
                         viewport={viewport}
                       />
-                    </React.Fragment>
+                    </Fragment>
                   ))
                 : null}
             </svg>
@@ -336,7 +337,7 @@ function Box3D({
     const crz = Math.cos(rz);
     const srz = Math.sin(rz);
 
-    const result: number[][] = [];
+    const result: [number, number, number][] = [];
 
     for (let k = -1; k <= 1; k += 2) {
       for (let j = -1; j <= 1; j += 2) {
@@ -394,7 +395,7 @@ function Box3D({
     return null;
   }
 
-  const edges = [
+  const edges: [number, number][] = [
     [0, 1],
     [2, 3],
     [4, 5],
@@ -455,7 +456,8 @@ function BoxMask({
   index: number;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const rgb = segmentationColorsRgb[index % segmentationColorsRgb.length];
+  const rgb: [number, number, number] =
+    segmentationColorsRgb[index % segmentationColorsRgb.length] ?? [0, 0, 0];
 
   useEffect(() => {
     if (!canvasRef.current) {

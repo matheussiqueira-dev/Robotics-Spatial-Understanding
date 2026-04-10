@@ -31,14 +31,16 @@ export const segmentationColors = [
   '#F43F5E',
 ];
 
-export const segmentationColorsRgb = segmentationColors.map((hex) => {
-  const normalized = hex.replace('#', '');
-  return [
-    parseInt(normalized.slice(0, 2), 16),
-    parseInt(normalized.slice(2, 4), 16),
-    parseInt(normalized.slice(4, 6), 16),
-  ];
-});
+export const segmentationColorsRgb: [number, number, number][] = segmentationColors.map(
+  (hex) => {
+    const normalized = hex.replace('#', '');
+    return [
+      parseInt(normalized.slice(0, 2), 16),
+      parseInt(normalized.slice(2, 4), 16),
+      parseInt(normalized.slice(4, 6), 16),
+    ] as [number, number, number];
+  },
+);
 
 export const modelOptions: {id: SpatialModel; label: string; hint: string}[] = [
   {

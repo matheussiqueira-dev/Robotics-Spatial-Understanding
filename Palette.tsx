@@ -1,5 +1,5 @@
 import {useAtom} from 'jotai';
-import React from 'react';
+import type {CSSProperties} from 'react';
 import {ActiveColorAtom} from './atoms';
 import {drawColors} from './consts';
 
@@ -13,7 +13,7 @@ export function Palette() {
           key={color}
           type="button"
           className={`palette__swatch ${activeColor === color ? 'is-active' : ''}`}
-          style={{'--swatch': color} as React.CSSProperties}
+          style={{'--swatch': color} as CSSProperties}
           onClick={() => setActiveColor(color)}
           role="radio"
           aria-checked={activeColor === color}
