@@ -456,8 +456,10 @@ function BoxMask({
   index: number;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  // Fallback cast is safe: literal [0,0,0] must be tuple not number[]
   const rgb: [number, number, number] =
-    segmentationColorsRgb[index % segmentationColorsRgb.length] ?? [0, 0, 0];
+    segmentationColorsRgb[index % segmentationColorsRgb.length] ??
+    ([0, 0, 0] as [number, number, number]);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -484,7 +486,10 @@ function BoxMask({
       const pixels = context.getImageData(0, 0, image.width, image.height);
 
       for (let cursor = 0; cursor < pixels.data.length; cursor += 4) {
-        pixels.data[cursor + 3] = pixels.data[cursor];
+        // noUncheckedIndexedAccess: guard the TypedArray read; the write side
+        // is always valid for Uint8ClampedArray.
+        const srcAlpha = pixels.data[cursor] ?? 0;
+        pixels.data[cursor + 3] = srcAlpha;
         pixels.data[cursor] = rgb[0];
         pixels.data[cursor + 1] = rgb[1];
         pixels.data[cursor + 2] = rgb[2];

@@ -87,7 +87,7 @@ const create2DItems = (
       y: round(clamp(y, 0, 0.95)),
       width: round(clamp(width, 0.05, 0.5)),
       height: round(clamp(height, 0.05, 0.5)),
-      label: labels[index],
+      label: labels[index] ?? 'item',
       score: round(0.56 + rng() * 0.4, 3),
     };
   });
@@ -116,7 +116,7 @@ const createPointItems = (
       x: round(clamp(0.08 + rng() * 0.84, 0, 1)),
       y: round(clamp(0.08 + rng() * 0.84, 0, 1)),
     },
-    label: labels[index],
+    label: labels[index] ?? 'item',
     score: round(0.62 + rng() * 0.35, 3),
   }));
 };
@@ -150,7 +150,7 @@ const create3DItems = (
         number,
         number,
       ],
-      label: labels[index],
+      label: labels[index] ?? 'item',
       score: round(0.52 + rng() * 0.4, 3),
     };
   });
