@@ -1,5 +1,9 @@
 {
   "name": "Robotics Spatial Understanding",
-  "description": "Interactive platform for spatial scene analysis in robotics workflows.",
+  "description": "Interactive fullstack platform for spatial scene analysis in robotics workflows — 2D/3D detection, segmentation and point-of-interest identification.",
+  "author": "Matheus Siqueira",
+  "website": "https://www.matheussiqueira.dev/",
+  "repository": "https://github.com/matheussiqueira-dev/Robotics-Spatial-Understanding",
+  "license": "MIT",
   "requestFramePermissions": []
 }
