@@ -295,7 +295,17 @@ export function Prompt() {
         </div>
       </div>
 
-      {errorMessage ? <p className="error-banner">{errorMessage}</p> : null}
+      {isLoading ? (
+        <p role="status" aria-live="polite" className="sr-only">
+          Analise em andamento…
+        </p>
+      ) : null}
+
+      {errorMessage ? (
+        <p role="alert" className="error-banner">
+          {errorMessage}
+        </p>
+      ) : null}
     </section>
   );
 }

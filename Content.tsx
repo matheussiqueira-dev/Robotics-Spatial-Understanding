@@ -178,7 +178,7 @@ export function Content() {
           <img
             src={imageSrc}
             className="viewer-image"
-            alt="Cena em analise"
+            alt="Cena robotica carregada para analise espacial"
             onLoad={(event) => {
               setMediaDims({
                 width: event.currentTarget.naturalWidth,
@@ -255,6 +255,8 @@ export function Content() {
             ? boundingBoxes2D.map((box, index) => (
                 <div
                   key={`box2d-${index}`}
+                  role="img"
+                  aria-label={`${box.label}, confianca ${Math.round(box.score * 100)}%`}
                   className={`overlay-bbox bbox ${index === hoveredBox ? 'reveal' : ''}`}
                   style={{
                     top: `${box.y * 100}%`,
@@ -273,6 +275,8 @@ export function Content() {
             ? boundingBoxMasks.map((box, index) => (
                 <div
                   key={`mask-${index}`}
+                  role="img"
+                  aria-label={`Mascara: ${box.label}, confianca ${Math.round(box.score * 100)}%`}
                   className={`overlay-bbox bbox ${index === hoveredBox ? 'reveal' : ''}`}
                   style={{
                     top: `${box.y * 100}%`,
@@ -292,6 +296,8 @@ export function Content() {
             ? points.map((item, index) => (
                 <div
                   key={`point-${index}`}
+                  role="img"
+                  aria-label={`Ponto: ${item.label}, confianca ${Math.round(item.score * 100)}%`}
                   className="point-marker"
                   style={{
                     left: `${item.point.x * 100}%`,

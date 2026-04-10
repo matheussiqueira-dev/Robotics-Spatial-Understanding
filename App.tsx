@@ -16,8 +16,12 @@ function JsonDisplay() {
   return (
     <aside className="panel inspector-panel">
       <div className="inspector-section">
-        <h2>API Request</h2>
-        <pre aria-live="polite">
+        <h2 id="inspector-request-label">API Request</h2>
+        <pre
+          role="region"
+          aria-labelledby="inspector-request-label"
+          aria-live="polite"
+          aria-atomic="true">
           <code>
             {requestJson ||
               'Execute uma analise para visualizar aqui o contrato enviado para a API.'}
@@ -26,8 +30,12 @@ function JsonDisplay() {
       </div>
 
       <div className="inspector-section">
-        <h2>API Response</h2>
-        <pre aria-live="polite">
+        <h2 id="inspector-response-label">API Response</h2>
+        <pre
+          role="region"
+          aria-labelledby="inspector-response-label"
+          aria-live="polite"
+          aria-atomic="true">
           <code>
             {responseJson ||
               'A resposta detalhada da API aparecera aqui apos a primeira execucao.'}
