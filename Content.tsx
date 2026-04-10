@@ -84,30 +84,39 @@ export function Content() {
     };
   }, [containerDims, mediaDims]);
 
+  /**
+   * Determines which detection box the pointer is over using the normalised
+   * coordinates already stored in state — no DOM query needed.
+   * Items are sorted by area (ascending) so the smallest, most precise box
+   * wins when items overlap.
+   */
   const updateHoveredBox = (event: React.PointerEvent<HTMLDivElement>) => {
-    const boxes = document.querySelectorAll('.overlay-bbox');
-    const details = Array.from(boxes).map((box, index) => {
-      const rect = box.getBoundingClientRect();
-      return {
-        index,
-        top: rect.top,
-        left: rect.left,
-        width: rect.width,
-        height: rect.height,
-      };
-    });
+    if (!overlayRef.current) return;
 
-    const sortedByArea = details.sort(
-      (a, b) => a.width * a.height - b.width * b.height,
-    );
+    const bounds = overlayRef.current.getBoundingClientRect();
+    const nx = (event.clientX - bounds.left) / viewport.width;
+    const ny = (event.clientY - bounds.top) / viewport.height;
 
-    const found = sortedByArea.find(({top, left, width, height}) => {
-      const isWithinX = event.clientX > left && event.clientX < left + width;
-      const isWithinY = event.clientY > top && event.clientY < top + height;
-      return isWithinX && isWithinY;
-    });
+    type BoxEntry = {index: number; area: number};
 
-    setHoveredBox(found ? found.index : null);
+    const candidates: BoxEntry[] = [];
+
+    if (detectType === '2D bounding boxes') {
+      boundingBoxes2D.forEach((b, i) => {
+        if (nx >= b.x && nx <= b.x + b.width && ny >= b.y && ny <= b.y + b.height) {
+          candidates.push({index: i, area: b.width * b.height});
+        }
+      });
+    } else if (detectType === 'Segmentation masks') {
+      boundingBoxMasks.forEach((b, i) => {
+        if (nx >= b.x && nx <= b.x + b.width && ny >= b.y && ny <= b.y + b.height) {
+          candidates.push({index: i, area: b.width * b.height});
+        }
+      });
+    }
+
+    candidates.sort((a, b) => a.area - b.area);
+    setHoveredBox(candidates[0]?.index ?? null);
   };
 
   const appendStrokePoint = (event: React.PointerEvent<HTMLDivElement>) => {
