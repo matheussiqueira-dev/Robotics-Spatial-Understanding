@@ -4,7 +4,7 @@ export function getSvgPathFromStroke(stroke: number[][]): string {
   const first = stroke[0];
   if (!first) return '';
 
-  const d = stroke.reduce(
+  const d = stroke.reduce<(string | number)[]>(
     (acc, point, i, arr) => {
       const x0 = point[0] ?? 0;
       const y0 = point[1] ?? 0;
@@ -14,7 +14,7 @@ export function getSvgPathFromStroke(stroke: number[][]): string {
       acc.push(x0, y0, (x0 + x1) / 2, (y0 + y1) / 2);
       return acc;
     },
-    ['M', first[0] ?? 0, first[1] ?? 0, 'Q'] as (string | number)[],
+    ['M', first[0] ?? 0, first[1] ?? 0, 'Q'],
   );
 
   d.push('Z');
@@ -34,9 +34,9 @@ export function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
-export function safeJsonParse<T>(value: string): T | null {
+export function safeJsonParse(value: string): unknown {
   try {
-    return JSON.parse(value) as T;
+    return JSON.parse(value) as unknown;
   } catch {
     return null;
   }

@@ -1,7 +1,6 @@
-import {useAtom} from 'jotai';
-import {detectTypeOptions, promptTemplates} from './consts';
-import {DetectTypeAtom, HoverEnteredAtom} from './atoms';
-import {DetectTypes} from './Types';
+import { useAtom } from 'jotai';
+import { detectTypeOptions, promptTemplates } from './consts';
+import { DetectTypeAtom, HoverEnteredAtom } from './atoms';
 
 export function DetectTypeSelector() {
   const [detectType, setDetectType] = useAtom(DetectTypeAtom);
@@ -20,7 +19,7 @@ export function DetectTypeSelector() {
             aria-selected={detectType === label}
             onClick={() => {
               setHoverEntered(false);
-              setDetectType(label as DetectTypes);
+              setDetectType(label);
             }}>
             <span className="detect-card__title">{promptTemplates[label].title}</span>
             <span className="detect-card__helper">{promptTemplates[label].helper}</span>

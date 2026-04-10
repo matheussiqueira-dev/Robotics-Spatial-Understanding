@@ -1,19 +1,18 @@
-import {AnalyzeRequestBody, AnalyzeResponseBody} from '../Types';
-import {simulateSpatialAnalysis} from '../shared/spatialSimulation';
-import {safeJsonParse} from '../utils';
-import {validateAnalyzeResponse} from './validators';
+import type { AnalyzeRequestBody, AnalyzeResponseBody } from '../Types';
+import { simulateSpatialAnalysis } from '../shared/spatialSimulation';
+import { safeJsonParse } from '../utils';
+import { validateAnalyzeResponse } from './validators';
 
-const API_BASE = (import.meta.env.VITE_SPATIAL_API_BASE_URL || '/api/v1').replace(
+const API_BASE = (import.meta.env.VITE_SPATIAL_API_BASE_URL ?? '/api/v1').replace(
   /\/$/,
   '',
 );
-const API_TIMEOUT_MS = Number(import.meta.env.VITE_SPATIAL_API_TIMEOUT_MS || 15000);
-const ENABLE_LOCAL_FALLBACK =
-  import.meta.env.VITE_ENABLE_LOCAL_FALLBACK !== 'false';
+const API_TIMEOUT_MS = Number(import.meta.env.VITE_SPATIAL_API_TIMEOUT_MS ?? 15000);
+const ENABLE_LOCAL_FALLBACK = import.meta.env.VITE_ENABLE_LOCAL_FALLBACK !== 'false';
 
 const getErrorMessage = (payload: unknown, status: number) => {
   if (payload && typeof payload === 'object' && 'error' in payload) {
-    const candidate = (payload as {error?: unknown}).error;
+    const candidate = (payload as { error?: unknown }).error;
     if (typeof candidate === 'string') {
       return candidate;
     }
@@ -21,9 +20,9 @@ const getErrorMessage = (payload: unknown, status: number) => {
       candidate &&
       typeof candidate === 'object' &&
       'message' in candidate &&
-      typeof (candidate as {message?: unknown}).message === 'string'
+      typeof (candidate as { message?: unknown }).message === 'string'
     ) {
-      return (candidate as {message: string}).message;
+      return (candidate as { message: string }).message;
     }
   }
 
@@ -47,7 +46,7 @@ export async function requestSpatialAnalysis(
     });
 
     const text = await response.text();
-    const parsed = safeJsonParse<unknown>(text);
+    const parsed = safeJsonParse(text);
 
     if (!response.ok) {
       throw new Error(getErrorMessage(parsed, response.status));

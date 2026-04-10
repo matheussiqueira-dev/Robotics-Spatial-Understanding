@@ -1,8 +1,8 @@
-import {Component, type ErrorInfo, type ReactNode} from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 
-type Props = {children: ReactNode};
+type Props = { children: ReactNode };
 
-type State = {hasError: boolean; message: string};
+type State = { hasError: boolean; message: string };
 
 /**
  * Top-level React error boundary.
@@ -14,13 +14,13 @@ type State = {hasError: boolean; message: string};
 export class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {hasError: false, message: ''};
+    this.state = { hasError: false, message: '' };
   }
 
   static getDerivedStateFromError(error: unknown): State {
     const message =
       error instanceof Error ? error.message : 'Erro inesperado na aplicacao.';
-    return {hasError: true, message};
+    return { hasError: true, message };
   }
 
   override componentDidCatch(error: unknown, info: ErrorInfo) {
@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component<Props, State> {
             type="button"
             className="btn btn--ghost"
             onClick={() => {
-              this.setState({hasError: false, message: ''});
+              this.setState({ hasError: false, message: '' });
             }}>
             Tentar novamente
           </button>

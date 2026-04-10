@@ -1,11 +1,11 @@
-import {useAtom} from 'jotai';
+import { useAtom } from 'jotai';
 import {
   DetectTypeAtom,
   HoverEnteredAtom,
   IsLoadingAtom,
   RevealOnHoverModeAtom,
 } from './atoms';
-import {useResetState} from './hooks';
+import { useResetState } from './hooks';
 
 export function TopBar() {
   const resetState = useResetState();

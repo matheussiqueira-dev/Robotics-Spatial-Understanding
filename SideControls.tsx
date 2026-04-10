@@ -1,4 +1,4 @@
-import {useAtom} from 'jotai';
+import { useAtom } from 'jotai';
 import {
   DrawModeAtom,
   ImageSrcAtom,
@@ -6,7 +6,7 @@ import {
   IsUploadedImageAtom,
   SelectedExampleIdAtom,
 } from './atoms';
-import {useResetState} from './hooks';
+import { useResetState } from './hooks';
 
 export function SideControls() {
   const resetState = useResetState();

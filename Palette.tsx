@@ -1,7 +1,7 @@
-import {useAtom} from 'jotai';
-import type {CSSProperties} from 'react';
-import {ActiveColorAtom} from './atoms';
-import {drawColors} from './consts';
+import { useAtom } from 'jotai';
+import type { CSSProperties } from 'react';
+import { ActiveColorAtom } from './atoms';
+import { drawColors } from './consts';
 
 export function Palette() {
   const [activeColor, setActiveColor] = useAtom(ActiveColorAtom);
@@ -13,7 +13,7 @@ export function Palette() {
           key={color}
           type="button"
           className={`palette__swatch ${activeColor === color ? 'is-active' : ''}`}
-          style={{'--swatch': color} as CSSProperties}
+          style={{ '--swatch': color } as CSSProperties}
           onClick={() => setActiveColor(color)}
           role="radio"
           aria-checked={activeColor === color}

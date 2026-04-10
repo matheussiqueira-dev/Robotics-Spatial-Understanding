@@ -1,10 +1,10 @@
 import cors from 'cors';
-import express, {type NextFunction, type Request, type Response} from 'express';
+import express, { type NextFunction, type Request, type Response } from 'express';
 import helmet from 'helmet';
-import {z} from 'zod';
-import {simulateSpatialAnalysis} from '../shared/spatialSimulation';
-import {DETECT_TYPES, MODEL_IDS, type AnalyzeRequestBody} from '../Types';
-import {logger} from './logger';
+import { z } from 'zod';
+import { simulateSpatialAnalysis } from '../shared/spatialSimulation';
+import { DETECT_TYPES, MODEL_IDS, type AnalyzeRequestBody } from '../Types';
+import { logger } from './logger';
 
 const app = express();
 
@@ -41,23 +41,23 @@ const analyzeSchema = z.object({
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const MAX_REQUESTS_PER_WINDOW = 80;
 
-const ipCounters = new Map<string, {count: number; resetAt: number}>();
+const ipCounters = new Map<string, { count: number; resetAt: number }>();
 
-const checkRateLimit = (ip: string): {allowed: boolean; remaining: number} => {
+const checkRateLimit = (ip: string): { allowed: boolean; remaining: number } => {
   const now = Date.now();
   const entry = ipCounters.get(ip);
 
   if (!entry || now >= entry.resetAt) {
-    ipCounters.set(ip, {count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS});
-    return {allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - 1};
+    ipCounters.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - 1 };
   }
 
   if (entry.count >= MAX_REQUESTS_PER_WINDOW) {
-    return {allowed: false, remaining: 0};
+    return { allowed: false, remaining: 0 };
   }
 
   entry.count += 1;
-  return {allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - entry.count};
+  return { allowed: true, remaining: MAX_REQUESTS_PER_WINDOW - entry.count };
 };
 
 // ── Middleware ────────────────────────────────────────────────────────────────
@@ -66,7 +66,7 @@ app.disable('x-powered-by');
 
 app.use(
   helmet({
-    crossOriginResourcePolicy: {policy: 'cross-origin'},
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
@@ -89,7 +89,7 @@ app.use(
   }),
 );
 
-app.use(express.json({limit: '8mb'}));
+app.use(express.json({ limit: '8mb' }));
 
 /** Structured request logger — logs method, path and status after response. */
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -164,14 +164,14 @@ app.post('/api/v1/spatial/analyze', (req: Request, res: Response) => {
 
 app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
   const message = error instanceof Error ? error.message : 'Unknown error';
-  logger.error('unhandled error', {message});
+  logger.error('unhandled error', { message });
   res.status(500).json({
-    error: {message: 'Erro interno ao processar a requisicao.'},
+    error: { message: 'Erro interno ao processar a requisicao.' },
   });
 });
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 
 app.listen(port, () => {
-  logger.info('server started', {port, allowedOrigin});
+  logger.info('server started', { port, allowedOrigin });
 });

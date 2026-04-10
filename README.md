@@ -64,12 +64,12 @@ O sistema apoia operacoes de robotica aplicada — picking, inventario visual, i
 
 ## Modos de deteccao
 
-| Modo | Saida | Uso tipico |
-|---|---|---|
-| **2D Bounding Boxes** | `[x, y, w, h]` normalizado 0-1 | Picking, contagem |
-| **Segmentation Masks** | Caixa + mascara SVG por instancia | Inspeccao, separacao |
-| **Points** | Ponto `(x, y)` normalizado | Planejamento de garra |
-| **3D Bounding Boxes** | `[cx,cy,cz, l,w,h, rx,ry,rz]` | Manipulacao assistida |
+| Modo                   | Saida                             | Uso tipico            |
+| ---------------------- | --------------------------------- | --------------------- |
+| **2D Bounding Boxes**  | `[x, y, w, h]` normalizado 0-1    | Picking, contagem     |
+| **Segmentation Masks** | Caixa + mascara SVG por instancia | Inspeccao, separacao  |
+| **Points**             | Ponto `(x, y)` normalizado        | Planejamento de garra |
+| **3D Bounding Boxes**  | `[cx,cy,cz, l,w,h, rx,ry,rz]`     | Manipulacao assistida |
 
 ---
 
@@ -181,33 +181,33 @@ make ci            # type-check + lint + fmt:check + test + build
 
 ## Variaveis de ambiente
 
-| Variavel | Padrao | Descricao |
-|---|---|---|
-| `VITE_SPATIAL_API_BASE_URL` | `/api/v1` | Base da API no frontend |
-| `VITE_SPATIAL_API_TIMEOUT_MS` | `15000` | Timeout da requisicao HTTP (ms) |
-| `VITE_ENABLE_LOCAL_FALLBACK` | `true` | Ativa simulador local se API falhar |
-| `VITE_SPATIAL_API_PROXY_TARGET` | `http://localhost:8787` | Alvo do proxy Vite |
-| `PORT` | `8787` | Porta do servidor Express |
-| `SPATIAL_ALLOWED_ORIGIN` | `*` | Origem permitida no CORS |
+| Variavel                        | Padrao                  | Descricao                           |
+| ------------------------------- | ----------------------- | ----------------------------------- |
+| `VITE_SPATIAL_API_BASE_URL`     | `/api/v1`               | Base da API no frontend             |
+| `VITE_SPATIAL_API_TIMEOUT_MS`   | `15000`                 | Timeout da requisicao HTTP (ms)     |
+| `VITE_ENABLE_LOCAL_FALLBACK`    | `true`                  | Ativa simulador local se API falhar |
+| `VITE_SPATIAL_API_PROXY_TARGET` | `http://localhost:8787` | Alvo do proxy Vite                  |
+| `PORT`                          | `8787`                  | Porta do servidor Express           |
+| `SPATIAL_ALLOWED_ORIGIN`        | `*`                     | Origem permitida no CORS            |
 
 ---
 
 ## Scripts
 
-| Comando | Descricao |
-|---|---|
-| `npm run dev` | Frontend + backend em paralelo |
-| `npm run dev:web` | Apenas frontend |
-| `npm run dev:api` | Apenas backend |
-| `npm run build` | Build de producao |
-| `npm run preview` | Preview do build |
-| `npm run type-check` | Verificacao de tipos TypeScript |
-| `npm run lint` | ESLint (typescript-eslint strict) |
-| `npm run lint:fix` | ESLint com correcao automatica |
-| `npm run fmt` | Prettier (formatar) |
-| `npm run fmt:check` | Prettier (verificar) |
-| `npm test` | Vitest (execucao unica) |
-| `npm run test:watch` | Vitest modo watch |
+| Comando                 | Descricao                         |
+| ----------------------- | --------------------------------- |
+| `npm run dev`           | Frontend + backend em paralelo    |
+| `npm run dev:web`       | Apenas frontend                   |
+| `npm run dev:api`       | Apenas backend                    |
+| `npm run build`         | Build de producao                 |
+| `npm run preview`       | Preview do build                  |
+| `npm run type-check`    | Verificacao de tipos TypeScript   |
+| `npm run lint`          | ESLint (typescript-eslint strict) |
+| `npm run lint:fix`      | ESLint com correcao automatica    |
+| `npm run fmt`           | Prettier (formatar)               |
+| `npm run fmt:check`     | Prettier (verificar)              |
+| `npm test`              | Vitest (execucao unica)           |
+| `npm run test:watch`    | Vitest modo watch                 |
 | `npm run test:coverage` | Vitest com relatorio de cobertura |
 
 ---

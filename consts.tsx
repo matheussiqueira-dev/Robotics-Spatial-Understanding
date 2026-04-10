@@ -1,11 +1,5 @@
-import {
-  DETECT_TYPES,
-  DetectTypes,
-  ExampleImage,
-  MODEL_IDS,
-  PromptTemplate,
-  SpatialModel,
-} from './Types';
+import { DETECT_TYPES, MODEL_IDS } from './Types';
+import type { DetectTypes, ExampleImage, PromptTemplate, SpatialModel } from './Types';
 
 export const drawColors = [
   '#0B1220',
@@ -42,7 +36,7 @@ export const segmentationColorsRgb: [number, number, number][] = segmentationCol
   },
 );
 
-export const modelOptions: {id: SpatialModel; label: string; hint: string}[] = [
+export const modelOptions: { id: SpatialModel; label: string; hint: string }[] = [
   {
     id: MODEL_IDS[0],
     label: 'Vision Core v2',
@@ -72,8 +66,7 @@ export const promptTemplates: Record<DetectTypes, PromptTemplate> = {
   },
   'Segmentation masks': {
     title: 'Segmentacao',
-    helper:
-      'Retorna caixa, mascara e rotulo para cada instancia detectada.',
+    helper: 'Retorna caixa, mascara e rotulo para cada instancia detectada.',
     targetLabel: 'Classes para segmentar',
     targetPlaceholder: 'Ex: pecas azuis e cabos vermelhos',
     promptPlaceholder:
@@ -85,17 +78,14 @@ export const promptTemplates: Record<DetectTypes, PromptTemplate> = {
       'Retorna pontos normalizados no intervalo 0-1 para referencia de manipulacao.',
     targetLabel: 'Pontos desejados',
     targetPlaceholder: 'Ex: centro de cada ferramenta',
-    promptPlaceholder:
-      'Ex: priorize pontos com menor risco de colisao para a garra.',
+    promptPlaceholder: 'Ex: priorize pontos com menor risco de colisao para a garra.',
   },
   '3D bounding boxes': {
     title: 'Deteccao 3D',
-    helper:
-      'Retorna caixa 3D no formato [cx, cy, cz, l, w, h, rx, ry, rz].',
+    helper: 'Retorna caixa 3D no formato [cx, cy, cz, l, w, h, rx, ry, rz].',
     targetLabel: 'Objetos para 3D',
     targetPlaceholder: 'Ex: caixas empilhadas e carrinhos',
-    promptPlaceholder:
-      'Ex: prefira orientacoes alinhadas ao eixo principal da esteira.',
+    promptPlaceholder: 'Ex: prefira orientacoes alinhadas ao eixo principal da esteira.',
   },
 };
 
@@ -111,8 +101,7 @@ export const defaultPromptDrafts: Record<DetectTypes, string> = {
     'Retorne ate 20 resultados com rotulos curtos e sem duplicar objetos.',
   'Segmentation masks':
     'Forneca mascaras consistentes, priorizando objetos com boa visibilidade.',
-  Points:
-    'Retorne no maximo 12 pontos com rotulos claros para manipulacao.',
+  Points: 'Retorne no maximo 12 pontos com rotulos claros para manipulacao.',
   '3D bounding boxes':
     'Retorne caixas estaveis para planejamento de movimento sem colisao.',
 };
@@ -135,8 +124,7 @@ const makeRng = (seed: number) => {
   };
 };
 
-const encodeSvg = (svg: string) =>
-  `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+const encodeSvg = (svg: string) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
 const buildScene = (
   seed: number,
@@ -146,7 +134,7 @@ const buildScene = (
   palette: [string, string, string],
 ): ExampleImage => {
   const rng = makeRng(seed);
-  const blocks = Array.from({length: 8})
+  const blocks = Array.from({ length: 8 })
     .map(() => {
       const x = Math.round(rng() * 560 + 20);
       const y = Math.round(rng() * 320 + 20);
@@ -157,7 +145,7 @@ const buildScene = (
     })
     .join('');
 
-  const points = Array.from({length: 14})
+  const points = Array.from({ length: 14 })
     .map(() => {
       const cx = Math.round(rng() * 620 + 10);
       const cy = Math.round(rng() * 400 + 10);

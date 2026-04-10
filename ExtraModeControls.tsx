@@ -1,6 +1,6 @@
-import {useAtom} from 'jotai';
-import {DrawModeAtom, LinesAtom} from './atoms';
-import {Palette} from './Palette';
+import { useAtom } from 'jotai';
+import { DrawModeAtom, LinesAtom } from './atoms';
+import { Palette } from './Palette';
 
 export function ExtraModeControls() {
   const [drawMode, setDrawMode] = useAtom(DrawModeAtom);

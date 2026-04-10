@@ -1,4 +1,4 @@
-import {useSetAtom} from 'jotai';
+import { useSetAtom } from 'jotai';
 import {
   BoundingBoxes2DAtom,
   BoundingBoxes3DAtom,

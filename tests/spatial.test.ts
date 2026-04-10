@@ -1,7 +1,7 @@
-import {describe, expect, it} from 'vitest';
-import {simulateSpatialAnalysis} from '../shared/spatialSimulation';
-import {validateAnalyzeResponse} from '../services/validators';
-import type {AnalyzeRequestBody, DetectTypes} from '../Types';
+import { describe, expect, it } from 'vitest';
+import { simulateSpatialAnalysis } from '../shared/spatialSimulation';
+import { validateAnalyzeResponse } from '../services/validators';
+import type { AnalyzeRequestBody, DetectTypes } from '../Types';
 
 const basePayload: AnalyzeRequestBody = {
   detectType: '2D bounding boxes',
@@ -28,23 +28,23 @@ describe('simulateSpatialAnalysis', () => {
   });
 
   it('produces different results for different targets', () => {
-    const a = simulateSpatialAnalysis({...basePayload, target: 'alpha'});
-    const b = simulateSpatialAnalysis({...basePayload, target: 'beta'});
+    const a = simulateSpatialAnalysis({ ...basePayload, target: 'alpha' });
+    const b = simulateSpatialAnalysis({ ...basePayload, target: 'beta' });
     expect(a.requestId).not.toBe(b.requestId);
   });
 
   it('sets summary.confidenceBand to high when temperature <= 0.33', () => {
-    const result = simulateSpatialAnalysis({...basePayload, temperature: 0.1});
+    const result = simulateSpatialAnalysis({ ...basePayload, temperature: 0.1 });
     expect(result.summary.confidenceBand).toBe('high');
   });
 
   it('sets summary.confidenceBand to medium for mid-range temperature', () => {
-    const result = simulateSpatialAnalysis({...basePayload, temperature: 0.5});
+    const result = simulateSpatialAnalysis({ ...basePayload, temperature: 0.5 });
     expect(result.summary.confidenceBand).toBe('medium');
   });
 
   it('sets summary.confidenceBand to low when temperature > 0.66', () => {
-    const result = simulateSpatialAnalysis({...basePayload, temperature: 0.9});
+    const result = simulateSpatialAnalysis({ ...basePayload, temperature: 0.9 });
     expect(result.summary.confidenceBand).toBe('low');
   });
 
@@ -56,7 +56,7 @@ describe('simulateSpatialAnalysis', () => {
       '3D bounding boxes',
     ];
     for (const detectType of detectTypes) {
-      const result = simulateSpatialAnalysis({...basePayload, detectType});
+      const result = simulateSpatialAnalysis({ ...basePayload, detectType });
       expect(result.summary.itemCount).toBeGreaterThanOrEqual(2);
       expect(result.summary.itemCount).toBeLessThanOrEqual(10);
     }
@@ -87,7 +87,7 @@ describe('simulateSpatialAnalysis', () => {
         detectType: '2D bounding boxes',
       });
       for (const item of result.items) {
-        const box = item as {x: number; y: number; width: number; height: number};
+        const box = item as { x: number; y: number; width: number; height: number };
         expect(box.x).toBeGreaterThanOrEqual(0);
         expect(box.x).toBeLessThanOrEqual(1);
         expect(box.y).toBeGreaterThanOrEqual(0);
@@ -103,8 +103,8 @@ describe('simulateSpatialAnalysis', () => {
         detectType: '2D bounding boxes',
       });
       for (const item of result.items) {
-        expect((item as {score: number}).score).toBeGreaterThanOrEqual(0);
-        expect((item as {score: number}).score).toBeLessThanOrEqual(1);
+        expect((item as { score: number }).score).toBeGreaterThanOrEqual(0);
+        expect((item as { score: number }).score).toBeLessThanOrEqual(1);
       }
     });
   });
@@ -118,7 +118,7 @@ describe('simulateSpatialAnalysis', () => {
         detectType: 'Segmentation masks',
       });
       for (const item of result.items) {
-        expect((item as {imageData: string}).imageData).toMatch(/^data:image\//);
+        expect((item as { imageData: string }).imageData).toMatch(/^data:image\//);
       }
     });
   });
@@ -132,7 +132,7 @@ describe('simulateSpatialAnalysis', () => {
         detectType: 'Points',
       });
       for (const item of result.items) {
-        const pt = item as {point: {x: number; y: number}};
+        const pt = item as { point: { x: number; y: number } };
         expect(pt.point.x).toBeGreaterThanOrEqual(0);
         expect(pt.point.x).toBeLessThanOrEqual(1);
         expect(pt.point.y).toBeGreaterThanOrEqual(0);
@@ -151,7 +151,7 @@ describe('simulateSpatialAnalysis', () => {
         model: 'vision-depth-v1',
       });
       for (const item of result.items) {
-        const box3d = (item as {box_3d: number[]}).box_3d;
+        const box3d = (item as { box_3d: number[] }).box_3d;
         expect(Array.isArray(box3d)).toBe(true);
         expect(box3d.length).toBe(9);
         for (const val of box3d) {
@@ -210,7 +210,7 @@ describe('validateAnalyzeResponse', () => {
   });
 
   it('throws when requestId is missing', () => {
-    const broken = {...simulateSpatialAnalysis(basePayload), requestId: undefined};
+    const broken = { ...simulateSpatialAnalysis(basePayload), requestId: undefined };
     expect(() => validateAnalyzeResponse(broken, '2D bounding boxes')).toThrow(
       /invalida/i,
     );
@@ -227,7 +227,7 @@ describe('validateAnalyzeResponse', () => {
   it('throws on malformed 2D bounding box items', () => {
     const malformed = {
       ...simulateSpatialAnalysis(basePayload),
-      items: [{label: 'broken'}],
+      items: [{ label: 'broken' }],
     };
     expect(() => validateAnalyzeResponse(malformed, '2D bounding boxes')).toThrow(
       /invalida/i,
@@ -241,7 +241,7 @@ describe('validateAnalyzeResponse', () => {
     });
     const malformed = {
       ...base,
-      items: [{x: 0.1, y: 0.1, width: 0.2, height: 0.2, label: 'a', score: 0.9}],
+      items: [{ x: 0.1, y: 0.1, width: 0.2, height: 0.2, label: 'a', score: 0.9 }],
     };
     expect(() => validateAnalyzeResponse(malformed, 'Segmentation masks')).toThrow(
       /invalida/i,
@@ -255,7 +255,7 @@ describe('validateAnalyzeResponse', () => {
     });
     const malformed = {
       ...base,
-      items: [{point: {y: 0.5}, label: 'a', score: 0.9}],
+      items: [{ point: { y: 0.5 }, label: 'a', score: 0.9 }],
     };
     expect(() => validateAnalyzeResponse(malformed, 'Points')).toThrow(/invalida/i);
   });
@@ -267,7 +267,7 @@ describe('validateAnalyzeResponse', () => {
     });
     const malformed = {
       ...base,
-      items: [{box_3d: [1, 2, 3], label: 'a', score: 0.8}],
+      items: [{ box_3d: [1, 2, 3], label: 'a', score: 0.8 }],
     };
     expect(() => validateAnalyzeResponse(malformed, '3D bounding boxes')).toThrow(
       /invalida/i,
@@ -275,14 +275,14 @@ describe('validateAnalyzeResponse', () => {
   });
 
   it('throws when summary is absent', () => {
-    const broken = {...simulateSpatialAnalysis(basePayload), summary: undefined};
+    const broken = { ...simulateSpatialAnalysis(basePayload), summary: undefined };
     expect(() => validateAnalyzeResponse(broken, '2D bounding boxes')).toThrow(
       /invalida/i,
     );
   });
 
   it('throws when items is not an array', () => {
-    const broken = {...simulateSpatialAnalysis(basePayload), items: 'bad'};
+    const broken = { ...simulateSpatialAnalysis(basePayload), items: 'bad' };
     expect(() => validateAnalyzeResponse(broken, '2D bounding boxes')).toThrow(
       /invalida/i,
     );

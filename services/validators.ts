@@ -1,4 +1,4 @@
-import {
+import type {
   AnalyzeResponseBody,
   BoundingBox2DType,
   BoundingBox3DType,
@@ -20,7 +20,7 @@ const isBetween = (value: number, min: number, max: number) =>
 
 const assertBoundingBox2D = (value: unknown): value is BoundingBox2DType => {
   if (!isObject(value)) return false;
-  const {x, y, width, height, label, score} = value;
+  const { x, y, width, height, label, score } = value;
   return (
     isNumber(x) &&
     isNumber(y) &&
@@ -45,7 +45,7 @@ const assertBoundingBoxMask = (value: unknown): value is BoundingBoxMaskType => 
 
 const assertPoint = (value: unknown): value is PointingType => {
   if (!isObject(value) || !isObject(value['point'])) return false;
-  const {x, y} = value['point'];
+  const { x, y } = value['point'];
   return (
     isNumber(x) &&
     isNumber(y) &&
@@ -85,10 +85,7 @@ export function validateAnalyzeResponse(
     throw new Error('Resposta invalida: identificadores ausentes.');
   }
 
-  if (
-    !isString(value['detectType']) ||
-    value['detectType'] !== expectedDetectType
-  ) {
+  if (!isString(value['detectType']) || value['detectType'] !== expectedDetectType) {
     throw new Error('Resposta invalida: detectType inesperado.');
   }
 
@@ -120,25 +117,25 @@ export function validateAnalyzeResponse(
     if (!items.every(assertBoundingBox2D)) {
       throw new Error('Resposta invalida: caixas 2D malformadas.');
     }
-    return value as AnalyzeResponseBody & {detectType: '2D bounding boxes'};
+    return value as AnalyzeResponseBody & { detectType: '2D bounding boxes' };
   }
 
   if (expectedDetectType === 'Segmentation masks') {
     if (!items.every(assertBoundingBoxMask)) {
       throw new Error('Resposta invalida: mascaras malformadas.');
     }
-    return value as AnalyzeResponseBody & {detectType: 'Segmentation masks'};
+    return value as AnalyzeResponseBody & { detectType: 'Segmentation masks' };
   }
 
   if (expectedDetectType === 'Points') {
     if (!items.every(assertPoint)) {
       throw new Error('Resposta invalida: pontos malformados.');
     }
-    return value as AnalyzeResponseBody & {detectType: 'Points'};
+    return value as AnalyzeResponseBody & { detectType: 'Points' };
   }
 
   if (!items.every(assert3DBox)) {
     throw new Error('Resposta invalida: caixas 3D malformadas.');
   }
-  return value as AnalyzeResponseBody & {detectType: '3D bounding boxes'};
+  return value as AnalyzeResponseBody & { detectType: '3D bounding boxes' };
 }

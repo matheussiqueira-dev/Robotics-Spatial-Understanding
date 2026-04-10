@@ -1,6 +1,6 @@
-import {useAtom} from 'jotai';
+import { useAtom } from 'jotai';
 import getStroke from 'perfect-freehand';
-import {Fragment, useEffect, useMemo, useRef, useState} from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActiveColorAtom,
   BoundingBoxes2DAtom,
@@ -15,9 +15,9 @@ import {
   PointsAtom,
   RevealOnHoverModeAtom,
 } from './atoms';
-import {lineOptions, segmentationColorsRgb} from './consts';
-import {BoundingBox3DType} from './Types';
-import {getSvgPathFromStroke} from './utils';
+import { lineOptions, segmentationColorsRgb } from './consts';
+import type { BoundingBox3DType } from './Types';
+import { getSvgPathFromStroke } from './utils';
 
 const BOX_STROKE = '#2D7FF9';
 
@@ -36,8 +36,8 @@ export function Content() {
   const [fov] = useAtom(FovAtom);
 
   const [hoveredBox, setHoveredBox] = useState<number | null>(null);
-  const [containerDims, setContainerDims] = useState({width: 0, height: 0});
-  const [mediaDims, setMediaDims] = useState({width: 1, height: 1});
+  const [containerDims, setContainerDims] = useState({ width: 0, height: 0 });
+  const [mediaDims, setMediaDims] = useState({ width: 1, height: 1 });
 
   const stageRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
@@ -65,7 +65,7 @@ export function Content() {
 
   const viewport = useMemo(() => {
     if (!containerDims.width || !containerDims.height) {
-      return {width: 1, height: 1};
+      return { width: 1, height: 1 };
     }
 
     const mediaRatio = mediaDims.width / mediaDims.height;
@@ -97,20 +97,20 @@ export function Content() {
     const nx = (event.clientX - bounds.left) / viewport.width;
     const ny = (event.clientY - bounds.top) / viewport.height;
 
-    type BoxEntry = {index: number; area: number};
+    type BoxEntry = { index: number; area: number };
 
     const candidates: BoxEntry[] = [];
 
     if (detectType === '2D bounding boxes') {
       boundingBoxes2D.forEach((b, i) => {
         if (nx >= b.x && nx <= b.x + b.width && ny >= b.y && ny <= b.y + b.height) {
-          candidates.push({index: i, area: b.width * b.height});
+          candidates.push({ index: i, area: b.width * b.height });
         }
       });
     } else if (detectType === 'Segmentation masks') {
       boundingBoxMasks.forEach((b, i) => {
         if (nx >= b.x && nx <= b.x + b.width && ny >= b.y && ny <= b.y + b.height) {
-          candidates.push({index: i, area: b.width * b.height});
+          candidates.push({ index: i, area: b.width * b.height });
         }
       });
     }
@@ -324,8 +324,8 @@ function Box3D({
 }: {
   box: BoundingBox3DType;
   fov: number;
-  mediaDims: {width: number; height: number};
-  viewport: {width: number; height: number};
+  mediaDims: { width: number; height: number };
+  viewport: { width: number; height: number };
 }) {
   const corners = useMemo(() => {
     const [cx, cy, cz, l, w, h, rx, ry, rz] = box.box_3d;
@@ -367,13 +367,9 @@ function Box3D({
     }
 
     return result;
-  }, [box.box_3d]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [box.box_3d]);
 
   const projectedCorners = useMemo(() => {
-    if (!corners) {
-      return null;
-    }
-
     const fovRad = (fov * Math.PI) / 180;
     const focalLength = mediaDims.width / 2 / Math.tan(fovRad / 2);
     const centerX = mediaDims.width / 2;
@@ -390,10 +386,6 @@ function Box3D({
       return [u, v] as [number, number];
     });
   }, [corners, fov, mediaDims]);
-
-  if (!projectedCorners) {
-    return null;
-  }
 
   const edges: [number, number][] = [
     [0, 1],
@@ -448,18 +440,8 @@ function Box3D({
   );
 }
 
-function BoxMask({
-  box,
-  index,
-}: {
-  box: {imageData: string};
-  index: number;
-}) {
+function BoxMask({ box, index }: { box: { imageData: string }; index: number }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  // Fallback cast is safe: literal [0,0,0] must be tuple not number[]
-  const rgb: [number, number, number] =
-    segmentationColorsRgb[index % segmentationColorsRgb.length] ??
-    ([0, 0, 0] as [number, number, number]);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -470,6 +452,11 @@ function BoxMask({
     if (!context) {
       return;
     }
+
+    // Derive the colour inside the effect so the dependency array stays stable
+    const rgb: [number, number, number] =
+      segmentationColorsRgb[index % segmentationColorsRgb.length] ??
+      ([0, 0, 0] as [number, number, number]);
 
     const image = new Image();
     image.src = box.imageData;
@@ -497,7 +484,7 @@ function BoxMask({
 
       context.putImageData(pixels, 0, 0);
     };
-  }, [box.imageData, rgb]);
+  }, [box.imageData, index]);
 
   return <canvas ref={canvasRef} className="mask-canvas" />;
 }

@@ -1,6 +1,6 @@
-import {useAtom} from 'jotai';
+import { useAtom } from 'jotai';
 import getStroke from 'perfect-freehand';
-import {useMemo, useState} from 'react';
+import { useMemo, useState } from 'react';
 import {
   BoundingBoxes2DAtom,
   BoundingBoxes3DAtom,
@@ -21,10 +21,10 @@ import {
   TargetsAtom,
   TemperatureAtom,
 } from './atoms';
-import {lineOptions, modelOptions, promptTemplates} from './consts';
-import {AnalyzeRequestBody, SpatialModel} from './Types';
-import {requestSpatialAnalysis} from './services/spatialApi';
-import {getSvgPathFromStroke, loadImage} from './utils';
+import { lineOptions, modelOptions, promptTemplates } from './consts';
+import type { AnalyzeRequestBody, SpatialModel } from './Types';
+import { requestSpatialAnalysis } from './services/spatialApi';
+import { getSvgPathFromStroke, loadImage } from './utils';
 
 const MAX_IMAGE_SIZE = 960;
 
@@ -55,10 +55,7 @@ export function Prompt() {
 
   const template = promptTemplates[detectType];
 
-  const canSubmit = useMemo(
-    () => Boolean(imageSrc) && !isLoading,
-    [imageSrc, isLoading],
-  );
+  const canSubmit = useMemo(() => Boolean(imageSrc) && !isLoading, [imageSrc, isLoading]);
 
   const clearResults = () => {
     setBoundingBoxes2D([]);
@@ -155,9 +152,7 @@ export function Prompt() {
       setHoverEntered(false);
     } catch (error) {
       const message =
-        error instanceof Error
-          ? error.message
-          : 'Nao foi possivel concluir a analise.';
+        error instanceof Error ? error.message : 'Nao foi possivel concluir a analise.';
       setErrorMessage(message);
       setResponseJson(
         JSON.stringify(
@@ -186,9 +181,7 @@ export function Prompt() {
           <span>Modelo</span>
           <select
             value={selectedModel}
-            onChange={(event) =>
-              setSelectedModel(event.target.value as SpatialModel)
-            }
+            onChange={(event) => setSelectedModel(event.target.value as SpatialModel)}
             disabled={isLoading}>
             {modelOptions.map((option) => (
               <option key={option.id} value={option.id}>
@@ -196,7 +189,9 @@ export function Prompt() {
               </option>
             ))}
           </select>
-          <small>{modelOptions.find((option) => option.id === selectedModel)?.hint}</small>
+          <small>
+            {modelOptions.find((option) => option.id === selectedModel)?.hint}
+          </small>
         </label>
 
         <label className="field">
@@ -285,13 +280,19 @@ export function Prompt() {
         <button
           type="button"
           className="btn btn--primary"
-          onClick={handleSend}
+          onClick={() => {
+            void handleSend();
+          }}
           disabled={!canSubmit}>
           {isLoading ? 'Analisando...' : 'Executar analise'}
         </button>
 
         <div className="metrics">
-          {responseTime ? <span>Tempo total: {responseTime}</span> : <span>Sem execucoes recentes</span>}
+          {responseTime ? (
+            <span>Tempo total: {responseTime}</span>
+          ) : (
+            <span>Sem execucoes recentes</span>
+          )}
         </div>
       </div>
 

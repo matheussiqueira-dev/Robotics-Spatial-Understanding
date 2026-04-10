@@ -1,12 +1,12 @@
-import {useAtom} from 'jotai';
+import { useAtom } from 'jotai';
 import {
   ImageSrcAtom,
   IsLoadingAtom,
   IsUploadedImageAtom,
   SelectedExampleIdAtom,
 } from './atoms';
-import {exampleImages} from './consts';
-import {useResetState} from './hooks';
+import { exampleImages } from './consts';
+import { useResetState } from './hooks';
 
 export function ExampleImages() {
   const resetState = useResetState();

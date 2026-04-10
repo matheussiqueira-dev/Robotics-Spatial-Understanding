@@ -1,5 +1,5 @@
-import {describe, expect, it} from 'vitest';
-import {clamp, safeJsonParse, getSvgPathFromStroke} from '../utils';
+import { describe, expect, it } from 'vitest';
+import { clamp, safeJsonParse, getSvgPathFromStroke } from '../utils';
 
 describe('clamp', () => {
   it('returns the value when within bounds', () => {
@@ -25,7 +25,7 @@ describe('clamp', () => {
 
 describe('safeJsonParse', () => {
   it('parses valid JSON', () => {
-    expect(safeJsonParse<{a: number}>('{"a":1}')).toEqual({a: 1});
+    expect(safeJsonParse('{"a":1}')).toEqual({ a: 1 });
   });
 
   it('returns null for invalid JSON', () => {
@@ -37,7 +37,7 @@ describe('safeJsonParse', () => {
   });
 
   it('parses a JSON array', () => {
-    expect(safeJsonParse<number[]>('[1,2,3]')).toEqual([1, 2, 3]);
+    expect(safeJsonParse('[1,2,3]')).toEqual([1, 2, 3]);
   });
 });
 

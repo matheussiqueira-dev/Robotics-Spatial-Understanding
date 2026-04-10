@@ -1,4 +1,4 @@
-import {
+import type {
   AnalyzeRequestBody,
   AnalyzeResponseBody,
   BoundingBox2DType,
@@ -53,7 +53,7 @@ const buildLabels = (target: string, count: number) => {
 
   const base = tokens.length > 0 ? tokens : ['item'];
 
-  return Array.from({length: count}, (_, index) => {
+  return Array.from({ length: count }, (_, index) => {
     const token = base[index % base.length] ?? 'item';
     return `${token}-${index + 1}`;
   });
@@ -76,7 +76,7 @@ const create2DItems = (
   count: number,
 ): BoundingBox2DType[] => {
   const labels = buildLabels(target, count);
-  return Array.from({length: count}, (_, index) => {
+  return Array.from({ length: count }, (_, index) => {
     const width = 0.12 + rng() * 0.2;
     const height = 0.1 + rng() * 0.2;
     const x = rng() * (1 - width);
@@ -111,7 +111,7 @@ const createPointItems = (
   count: number,
 ): PointingType[] => {
   const labels = buildLabels(target, count);
-  return Array.from({length: count}, (_, index) => ({
+  return Array.from({ length: count }, (_, index) => ({
     point: {
       x: round(clamp(0.08 + rng() * 0.84, 0, 1)),
       y: round(clamp(0.08 + rng() * 0.84, 0, 1)),
@@ -127,7 +127,7 @@ const create3DItems = (
   count: number,
 ): BoundingBox3DType[] => {
   const labels = buildLabels(target, count);
-  return Array.from({length: count}, (_, index) => {
+  return Array.from({ length: count }, (_, index) => {
     const centerX = round(-0.9 + rng() * 1.8, 3);
     const centerY = round(-0.6 + rng() * 1.2, 3);
     const centerZ = round(1 + rng() * 3.6, 3);
@@ -221,19 +221,39 @@ export function simulateSpatialAnalysis(
 
   if (payload.detectType === '2D bounding boxes') {
     const items = create2DItems(payload.target, rng, count);
-    return {...base, detectType: '2D bounding boxes' as const, summary: makeSummary(items.length), items};
+    return {
+      ...base,
+      detectType: '2D bounding boxes' as const,
+      summary: makeSummary(items.length),
+      items,
+    };
   }
 
   if (payload.detectType === 'Segmentation masks') {
     const items = createMaskItems(payload.target, rng, seed, count);
-    return {...base, detectType: 'Segmentation masks' as const, summary: makeSummary(items.length), items};
+    return {
+      ...base,
+      detectType: 'Segmentation masks' as const,
+      summary: makeSummary(items.length),
+      items,
+    };
   }
 
   if (payload.detectType === 'Points') {
     const items = createPointItems(payload.target, rng, count);
-    return {...base, detectType: 'Points' as const, summary: makeSummary(items.length), items};
+    return {
+      ...base,
+      detectType: 'Points' as const,
+      summary: makeSummary(items.length),
+      items,
+    };
   }
 
   const items = create3DItems(payload.target, rng, count);
-  return {...base, detectType: '3D bounding boxes' as const, summary: makeSummary(items.length), items};
+  return {
+    ...base,
+    detectType: '3D bounding boxes' as const,
+    summary: makeSummary(items.length),
+    items,
+  };
 }

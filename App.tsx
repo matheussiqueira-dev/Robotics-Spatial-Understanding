@@ -1,12 +1,12 @@
-import {useAtom} from 'jotai';
-import {Content} from './Content';
-import {DetectTypeSelector} from './DetectTypeSelector';
-import {ExampleImages} from './ExampleImages';
-import {ExtraModeControls} from './ExtraModeControls';
-import {Prompt} from './Prompt';
-import {SideControls} from './SideControls';
-import {TopBar} from './TopBar';
-import {RequestJsonAtom, ResponseJsonAtom} from './atoms';
+import { useAtom } from 'jotai';
+import { Content } from './Content';
+import { DetectTypeSelector } from './DetectTypeSelector';
+import { ExampleImages } from './ExampleImages';
+import { ExtraModeControls } from './ExtraModeControls';
+import { Prompt } from './Prompt';
+import { SideControls } from './SideControls';
+import { TopBar } from './TopBar';
+import { RequestJsonAtom, ResponseJsonAtom } from './atoms';
 
 function JsonDisplay() {
   const [requestJson] = useAtom(RequestJsonAtom);

@@ -7,11 +7,7 @@ export const DETECT_TYPES = [
 
 export type DetectTypes = (typeof DETECT_TYPES)[number];
 
-export const MODEL_IDS = [
-  'vision-core-v2',
-  'vision-lite-v1',
-  'vision-depth-v1',
-] as const;
+export const MODEL_IDS = ['vision-core-v2', 'vision-lite-v1', 'vision-depth-v1'] as const;
 
 export type SpatialModel = (typeof MODEL_IDS)[number];
 
