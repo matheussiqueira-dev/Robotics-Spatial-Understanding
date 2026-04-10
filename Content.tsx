@@ -387,7 +387,7 @@ function Box3D({
       const scale = focalLength / z;
       const u = x * scale + centerX;
       const v = y * scale + centerY;
-      return [u, v];
+      return [u, v] as [number, number];
     });
   }, [corners, fov, mediaDims]);
 
