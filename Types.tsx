@@ -38,7 +38,7 @@ export type PointingType = {
 };
 
 export type BoundingBox3DType = {
-  box_3d: number[];
+  box_3d: [number, number, number, number, number, number, number, number, number];
   label: string;
   score: number;
 };
@@ -79,16 +79,37 @@ export type AnalyzeSummary = {
   note: string;
 };
 
-export type AnalyzeResponseBody = {
+/**
+ * Shared metadata fields carried by every response variant.
+ * Kept as a base type to avoid repetition across the discriminated union members.
+ */
+type AnalyzeResponseBase = {
   requestId: string;
   generatedAt: string;
-  detectType: DetectTypes;
   model: string;
   latencyMs: number;
   summary: AnalyzeSummary;
-  items:
-    | BoundingBox2DType[]
-    | BoundingBoxMaskType[]
-    | PointingType[]
-    | BoundingBox3DType[];
 };
+
+/**
+ * Discriminated union keyed on `detectType`.
+ * Narrowing on `response.detectType` yields the correct `items` array type
+ * without any unsafe `as` casts.
+ */
+export type AnalyzeResponseBody =
+  | (AnalyzeResponseBase & {
+      detectType: '2D bounding boxes';
+      items: BoundingBox2DType[];
+    })
+  | (AnalyzeResponseBase & {
+      detectType: 'Segmentation masks';
+      items: BoundingBoxMaskType[];
+    })
+  | (AnalyzeResponseBase & {
+      detectType: 'Points';
+      items: PointingType[];
+    })
+  | (AnalyzeResponseBase & {
+      detectType: '3D bounding boxes';
+      items: BoundingBox3DType[];
+    });

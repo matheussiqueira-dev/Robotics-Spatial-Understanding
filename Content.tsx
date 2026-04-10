@@ -312,10 +312,6 @@ function Box3D({
   viewport: {width: number; height: number};
 }) {
   const corners = useMemo(() => {
-    if (!box.box_3d || box.box_3d.length !== 9) {
-      return null;
-    }
-
     const [cx, cy, cz, l, w, h, rx, ry, rz] = box.box_3d;
 
     const crx = Math.cos(rx);
@@ -355,7 +351,7 @@ function Box3D({
     }
 
     return result;
-  }, [box.box_3d]);
+  }, [box.box_3d]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const projectedCorners = useMemo(() => {
     if (!corners) {

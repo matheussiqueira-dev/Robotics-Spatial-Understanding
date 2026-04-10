@@ -34,10 +34,14 @@ export function SideControls() {
 
             const reader = new FileReader();
             reader.onload = (loadEvent) => {
+              const result = loadEvent.target?.result;
+              if (typeof result !== 'string') {
+                return;
+              }
               resetState();
               setIsUploadedImage(true);
               setSelectedExampleId('upload');
-              setImageSrc(loadEvent.target?.result as string);
+              setImageSrc(result);
             };
             reader.readAsDataURL(file);
           }}

@@ -22,14 +22,7 @@ import {
   TemperatureAtom,
 } from './atoms';
 import {lineOptions, modelOptions, promptTemplates} from './consts';
-import {
-  AnalyzeRequestBody,
-  BoundingBox2DType,
-  BoundingBox3DType,
-  BoundingBoxMaskType,
-  PointingType,
-  SpatialModel,
-} from './Types';
+import {AnalyzeRequestBody, SpatialModel} from './Types';
 import {requestSpatialAnalysis} from './services/spatialApi';
 import {getSvgPathFromStroke, loadImage} from './utils';
 
@@ -149,14 +142,14 @@ export function Prompt() {
       const response = await requestSpatialAnalysis(payload);
       setResponseJson(JSON.stringify(response, null, 2));
 
-      if (detectType === '2D bounding boxes') {
-        setBoundingBoxes2D(response.items as BoundingBox2DType[]);
-      } else if (detectType === 'Segmentation masks') {
-        setBoundingBoxMasks(response.items as BoundingBoxMaskType[]);
-      } else if (detectType === 'Points') {
-        setPoints(response.items as PointingType[]);
+      if (response.detectType === '2D bounding boxes') {
+        setBoundingBoxes2D(response.items);
+      } else if (response.detectType === 'Segmentation masks') {
+        setBoundingBoxMasks(response.items);
+      } else if (response.detectType === 'Points') {
+        setPoints(response.items);
       } else {
-        setBoundingBoxes3D(response.items as BoundingBox3DType[]);
+        setBoundingBoxes3D(response.items);
       }
 
       setHoverEntered(false);

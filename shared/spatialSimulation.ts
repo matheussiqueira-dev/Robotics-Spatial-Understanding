@@ -139,16 +139,16 @@ const create3DItems = (
     const rotZ = round(-0.5 + rng() * 1.0, 3);
 
     return {
-      box_3d: [
-        centerX,
-        centerY,
-        centerZ,
-        length,
-        width,
-        height,
-        rotX,
-        rotY,
-        rotZ,
+      box_3d: [centerX, centerY, centerZ, length, width, height, rotX, rotY, rotZ] as [
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
       ],
       label: labels[index],
       score: round(0.52 + rng() * 0.4, 3),
